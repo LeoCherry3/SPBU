@@ -17,7 +17,7 @@ public class AdaptiveList<T> {
     }
 
     /**
-     * Метод для добавления элемента в конец списка
+     * Добавление элемента в конец списка
      *
      * @param element: элемент для добавления
      */
@@ -30,9 +30,10 @@ public class AdaptiveList<T> {
 
     /**
      * Удаление элемента из конца списка
+     *
+     * @return удалённый элемент
      */
-    @SuppressWarnings("unchecked")
-    public T remove() {
+    public T remove() {  //TODO: rename to pop
         if (size == 0) {
             throw new IllegalStateException("Cannot remove from empty list");
         }
@@ -50,15 +51,20 @@ public class AdaptiveList<T> {
 
     /**
      * Метод для получения элемента по индексу
+     *
+     * @return элемент
      */
-    @SuppressWarnings("unchecked")
     public T get(int index) {
         checkIndex(index);
         return getElementAt(index);
     }
 
+
     /**
      * Установка элемента по индексу
+     *
+     * @param index индекс изменяемого элемента
+     * @param element новый элемент
      */
     @SuppressWarnings("unchecked")
     public void set(int index, T element) {
@@ -73,10 +79,16 @@ public class AdaptiveList<T> {
         }
     }
 
+    /**
+     * @return текущий размер списка
+     */
     public int size() {
         return size;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean isEmpty() {
         return size == 0;
     }
@@ -86,11 +98,17 @@ public class AdaptiveList<T> {
      */
     public String getInternalRepresentation() {
         if (size == 0) return "NULL";
-        if (size == 1) return "SINGLE_ELEMENT";
+        if (size == 1) return "SINGLE";
         if (size >= 2 && size <= 5) return "ARRAY_5";
         return "ARRAY_LIST";
     }
 
+    /**
+     * Смена внутреннего типа при удалении/добавлении элемента на границе 0-1, 1-2, 5-6
+     *
+     * @param oldSize старый размер списка
+     * @param newSize новый размер списка
+     */
     @SuppressWarnings("unchecked")
     private void switchRepresentationIfNeeded(int oldSize, int newSize) {
         if (newSize == 0 && oldSize == 1) {
@@ -124,6 +142,11 @@ public class AdaptiveList<T> {
         }
     }
 
+    /**
+     * Добавление элемента в соответствующую внутреннюю структуру
+     *
+     * @param element новый элемент
+     */
     @SuppressWarnings("unchecked")
     private void addToCurrentRepresentation(T element) {
         if (size == 1) {
@@ -135,6 +158,12 @@ public class AdaptiveList<T> {
         }
     }
 
+    /**
+     * Получение элемента по индексу
+     *
+     * @param index индекс
+     * @return элемент с данным индексом в списке
+     */
     @SuppressWarnings("unchecked")
     private T getElementAt(int index) {
         if (size == 1) {
@@ -146,6 +175,11 @@ public class AdaptiveList<T> {
         }
     }
 
+    /**
+     * Проверка, что данный индекс существует в списке
+     *
+     * @param index индекс
+     */
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(
